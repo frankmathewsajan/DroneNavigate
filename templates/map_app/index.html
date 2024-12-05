@@ -98,7 +98,7 @@
 <script>
     // Center map at VIT AP Campus
     const vitApLat = 16.4819, vitApLng = 80.5083;
-    const map = L.map('map').setView([vitApLat, vitApLng], 16); // Zoom level 16 for campus view
+    const map = L.map('map').setView([vitApLat, vitApLng], 32); // Zoom level 16 for campus view
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
     // Store clicked points as coordinates
