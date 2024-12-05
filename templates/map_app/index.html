@@ -11,7 +11,7 @@
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
             color: #333;
-            height: 100vh; /* Full-screen height */
+            height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -54,7 +54,7 @@
         }
 
         #map {
-            flex: 1; /* Takes all available space */
+            flex: 1;
             width: 100%;
         }
 
@@ -86,6 +86,7 @@
     <div class="brand">Drone Mapper</div>
     <div class="nav-buttons">
         <button id="clear-markers">Clear All Markers</button>
+        <button id="clear-paths">Clear Paths</button>
         <form id="coordinates-form" method="POST" style="margin: 0; display: inline;">
             {% csrf_token %}
             <textarea name="coordinates" id="coordinates" hidden></textarea>
@@ -104,6 +105,8 @@
     // Store clicked points as coordinates
     let coordinates = [];
     const markers = [];
+    let mstLayer = L.layerGroup().addTo(map);
+    let droneLayer = L.layerGroup().addTo(map);
 
     map.on('click', function (e) {
         const marker = L.marker(e.latlng).addTo(map);
@@ -123,6 +126,12 @@
         markers.forEach(marker => map.removeLayer(marker));
         coordinates = [];
         document.getElementById('coordinates').value = JSON.stringify(coordinates);
+    });
+
+    // Clear paths
+    document.getElementById('clear-paths').addEventListener('click', () => {
+        mstLayer.clearLayers();
+        droneLayer.clearLayers();
     });
 
     // Function to calculate offset for parallel path
@@ -153,8 +162,8 @@
         })
         .then(response => response.json())
         .then(data => {
-            var mstLayer = L.layerGroup().addTo(map);
-            var droneLayer = L.layerGroup().addTo(map);
+            mstLayer.clearLayers();
+            droneLayer.clearLayers();
 
             data.mst.forEach(edge => {
                 L.polyline(edge, {color: 'blue'}).addTo(mstLayer);
